@@ -177,3 +177,4 @@ const makeCompany = (showAddress) => {
 };
 console.log(makeCompany(false));
 console.log(makeCompany(true));
+console.log(makeCompany(true));
