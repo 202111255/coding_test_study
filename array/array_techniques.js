@@ -52,4 +52,6 @@ console.log(evens);
 //전체 합 예
 const sum = numbers.reduce((a, b) => a+b);
 console.log(sum);
+//reduce() 메서드를 이용하면 배열의 전체 데이터를 하나로 합칠 수 있다.
+//reduce() 메서드는 익명함수가 받아야 하는 인수가 2개다,
 
