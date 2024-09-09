@@ -1,14 +1,12 @@
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
 
         Solution so = new Solution();
-        String[] included = {"aya", "ye", "woo", "magg"};
+        String[] included = {"12","123","1235","567","88"};
 
         System.out.println(so.solution(included));
 
@@ -18,20 +16,20 @@ public class Main {
 }
 
 class Solution {
-    public int solution(String[] babbling) {
-        for (int i = 0; i < babbling.length; i++) {
-            babbling[i] = babbling[i].replace("aya", "-");
-            babbling[i] = babbling[i].replace("ye", "-");
-            babbling[i] = babbling[i].replace("woo", "-");
-            babbling[i] = babbling[i].replace("ma", "-");
+    public boolean solution(String[] phone_book) {
+        HashMap<String, Integer> map = new HashMap<>();
 
+        for (String phone : phone_book) {
+            map.put(phone, 1);
         }
-        int count = 0;
-        for (int i = 0; i < babbling.length; i++) {
-            if(babbling[i].equals("-") || babbling[i].equals("--") || babbling[i].equals("---") || babbling[i].equals("----")) {
-                ++count;
+
+        for (String phone : phone_book) {
+            for (int i = 1; i < phone.length(); i++) {
+                if (map.containsKey(phone.substring(0, i))) {
+                    return false; // 접두어가 존재하면 false 반환
+                }
             }
         }
-        return count;
+        return true;
     }
 }
