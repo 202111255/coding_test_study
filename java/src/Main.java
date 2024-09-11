@@ -6,9 +6,10 @@ public class Main {
     public static void main(String[] args) {
 
         Solution so = new Solution();
-        String[] included = {"prev", "next", "next"};
+        int[] included1 = {1, 4, 4, 2};
+        int[] included2 = {6, 3, 8, 2};
 
-        System.out.println(so.solution("10:55", "00:05", "00:15", "06:55", included));
+        System.out.println(so.solution(included1, included2, 59));
 
     }
 
@@ -16,48 +17,28 @@ public class Main {
 }
 
 class Solution {
-    public String solution(String video_len, String pos, String op_start, String op_end, String[] commands) {
-        int int_video_len = Integer.parseInt(video_len.split(":")[0]) * 60 + Integer.parseInt(video_len.split(":")[1]);
-        int int_pos = Integer.parseInt(pos.split(":")[0]) * 60 + Integer.parseInt(pos.split(":")[1]);
-        int int_op_start = Integer.parseInt(op_start.split(":")[0]) * 60 + Integer.parseInt(op_start.split(":")[1]);
-        int int_op_end = Integer.parseInt(op_end.split(":")[0]) * 60 + Integer.parseInt(op_end.split(":")[1]);
+    public int solution(int[] diffs, int[] times, long limit) {
+        int level = Arrays.stream(diffs).min().getAsInt();
+        int diff = 0;
+        int time_cur = 0;
+        long total_time = limit+1;
 
-        int answer = int_pos;
-        if (answer >= int_op_start && answer <= int_op_end) {
-            answer = int_op_end;
-        }
-        for (String command : commands) {
-            if (command.equals("prev")) {
-                if (answer < 10) {
-                    answer = 0;
+        while(total_time > limit) {
+            total_time = 0;
+            int time_prev = 1;
+            for (int i = 0; i < diffs.length; i++) {
+                diff = diffs[i];
+                time_cur = times[i];
+                if (level >= diff) {
+                    total_time += time_cur;
                 } else {
-                    answer -= 10;
+                    total_time += (time_prev+time_cur)*(diff - level) + time_cur;
                 }
-            } else if (command.equals("next")) {
-                if (answer > int_video_len - 10) {
-                    answer = int_video_len;
-                } else {
-                    answer += 10;
-                }
+                time_prev = time_cur;
             }
-            if (answer >= int_op_start && answer <= int_op_end) {
-                answer = int_op_end;
-            }
+            level += 1;
+            //System.out.println("현재 level: " + level + "시간:" + total_time);
         }
-        String str_min = "";
-        String str_sec = "";
-        if (answer/60 < 10) {
-            str_min = "0" + Integer.toString(answer/60);
-        } else {
-            str_min = Integer.toString(answer/60);
-        }
-
-        if (answer%60 < 10) {
-            str_sec = "0" + Integer.toString(answer%60);
-        } else {
-            str_sec = Integer.toString(answer%60);
-        }
-
-        return str_min + ":" + str_sec;
+        return (level-1);
     }
 }
